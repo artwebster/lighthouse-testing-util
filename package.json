@@ -1,0 +1,12 @@
+{
+  "name": "lighthouse-testing-util",
+  "version": "1.0.0",
+  "description": "A program to run multiple Lighthouse tests on a URL, outputting the average & median results.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
