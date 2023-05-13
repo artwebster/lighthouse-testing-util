@@ -24,7 +24,7 @@ Example request body:
 
 to do:
 
-- add husky, testing on backend
-- upload frontend
-- switch to websocket
+- add SSE
+- add testing
+- build out frontend
 - connect a db
