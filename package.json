@@ -4,9 +4,13 @@
   "description": "A program to run multiple Lighthouse tests on a URL, outputting the average & median results.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"cd ./server && npm run server\" \"cd ./client && npm run dev\""
   },
   "keywords": [],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  }
 }
