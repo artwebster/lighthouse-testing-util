@@ -1,6 +1,7 @@
 import lighthouse from "lighthouse";
 import chromeLauncher from "chrome-launcher";
 import desktopConfig from "../config/desktop-config.js";
+import sendSSE from "../utils/sendSSE.js";
 
 async function launchChrome() {
   return await chromeLauncher.launch({
@@ -8,7 +9,7 @@ async function launchChrome() {
   });
 }
 
-async function closeChrome(chrome) {
+function closeChrome(chrome) {
   return chrome.kill();
 }
 
@@ -78,36 +79,50 @@ function calculateMedian(resultsArray) {
   };
 }
 
-async function runTests(url, runs, desktop) {
-  const chrome = await launchChrome();
-  const resultsArray = [];
-  const startTime = new Date();
-  const options = prepareOptions(chrome.port, desktop);
+let testParams = {};
 
-  try {
-    for (let i = 0; i < runs; i++) {
-      const runResult = await runLighthouse(url, options);
-      resultsArray.push(runResult.lhr);
-    }
-
-    const timeElapsed = calculateTimeElapsed(startTime);
-    const averageResult = calculateAverage(resultsArray, runs);
-    const medianResult = calculateMedian(resultsArray);
-
-    return { url, runs, desktop, timeElapsed, averageResult, medianResult };
-  } finally {
-    await closeChrome(chrome);
+export default async function runTestController(req, res) {
+  // loading the parameters for the test
+  if (req.method === "POST") {
+    testParams = req.body;
   }
-}
 
-export default async function lighthouseController(req, res) {
-  const { url, runs, desktop } = req.body;
+  // running the test with the loaded parameters
+  if (req.method === "GET") {
+    const { url, runs, desktop } = testParams;
+    const chrome = await launchChrome();
 
-  try {
-    const result = await runTests(url, runs, desktop);
+    try {
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Access-Control-Allow-Origin", "*");
 
-    res.status(200).json({ status: 200, data: result, message: "Tests successful" });
-  } catch (error) {
-    res.status(500).json({ status: 500, message: error.message });
+      sendSSE(res, "update", "Tests started");
+
+      const startTime = new Date();
+      const options = prepareOptions(chrome.port, desktop);
+      const resultsArray = [];
+
+      for (let i = 0; i < runs; i++) {
+        sendSSE(res, "update", `Running test ${i + 1}`);
+        const runResult = await runLighthouse(url, options);
+        resultsArray.push(runResult.lhr);
+      }
+
+      sendSSE(res, "update", `Tests finished, calculating results`);
+
+      const timeElapsed = calculateTimeElapsed(startTime);
+      const averageResult = calculateAverage(resultsArray, runs);
+      const medianResult = calculateMedian(resultsArray);
+
+      const results = { timeElapsed, averageResult, medianResult };
+
+      sendSSE(res, "results", JSON.stringify(results));
+    } catch (error) {
+      sendSSE(res, "message", `Error: ${error}`);
+    } finally {
+      await closeChrome(chrome);
+      sendSSE(res, "message", "Closing event stream");
+      res.end();
+    }
   }
 }

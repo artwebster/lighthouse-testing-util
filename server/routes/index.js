@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import runLighthouse from './runLighthouse.js';
+import { Router } from "express";
+import lighthouse from "./lighthouse.js";
 
 const router = Router();
 
-router.use('/api', runLighthouse);
+router.use("/lighthouse", lighthouse);
 
 export default router;

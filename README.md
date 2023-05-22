@@ -2,29 +2,15 @@
 
 A program to run multiple Lighthouse tests on a URL, outputting the average & median results.
 
-Currently have to make a POST request to http://localhost:5000/api/lighthouse.
+> Can run 'npm run start' in the root folder to start both client and server concurrently.
 
-Example request body:
+A basic frontend lets the user enter a url, the number of lighthouse tests to run (1 to 3), and the screen size to test (mobile or desktop). Clicking 'Submit' makes a POST request to the 'http://localhost:5000/lighthouse/prepTest' endpoint that loads the testing parameters into a custom endpoint, and then a follow-up GET request to 'localhost:5000/lighthouse/runTest' that initiates the tests and opens up an SSE stream to get updates/results.
 
-```json
-{
-  "url": "https://www.testurl.com/",
-  "runs": 3,
-  "desktop": true
-}
-```
-
-| Field   | Type    | Description                                          |
-| ------- | ------- | ---------------------------------------------------- |
-| url     | string  | url to test                                          |
-| runs    | number  | number of times to run the Lighthouse test           |
-| desktop | boolean | true for testing a desktop display, false for mobile |
 
 ---
 
 to do:
 
-- add SSE
 - add testing
 - build out frontend
 - connect a db

@@ -5,19 +5,44 @@ import "./App.css";
 function App() {
   const [response, setResponse] = useState(null);
 
+  // open a connection to the server to receive updates
+  function subscribeToEvent(source) {
+    const eventSource = new EventSource(source);
+    
+    eventSource.addEventListener('update', (ev) => {
+      setResponse(ev.data);
+    })
+
+    eventSource.addEventListener('results', (ev) => {
+      setResponse(ev.data);
+      eventSource.close();
+    })
+
+    eventSource.addEventListener('message', (ev) => {
+      console.log(ev.data);
+    })
+    
+    eventSource.onerror = (err) => {
+      console.log(err);
+      eventSource.close();
+    }
+  }
+
   function handleClick(ev) {
     const targetURL = ev.target.form[0].value;
     const numRuns = ev.target.form[1].value;
     const desktop = ev.target.form[3].checked;
-    console.log("form submitted for url: ", targetURL);
+
     axios
-      .post("/api/lighthouse", {
+      .post("/lighthouse/prepTest", {
         url: targetURL,
         runs: numRuns,
         desktop,
       })
-      .then((res) => setResponse(res.data))
-      .catch((err) => console.error("bad res!: ", err));
+      .then((res) => {
+        subscribeToEvent(res.data.data);
+      })
+      .catch((err) => console.error(err));
   }
 
   return (
@@ -39,7 +64,13 @@ function App() {
           </div>
           <div>
             <span>Device:</span>
-            <input type="radio" id="device-mobile" name="device" value="mobile" defaultChecked></input>
+            <input
+              type="radio"
+              id="device-mobile"
+              name="device"
+              value="mobile"
+              defaultChecked
+            ></input>
             <label htmlFor="device-mobile">mobile</label>
             <input type="radio" id="device-desktop" name="device" value="desktop"></input>
             <label htmlFor="device-desktop">desktop</label>
@@ -50,7 +81,7 @@ function App() {
         </form>
       </div>
       <div>
-        {response && <div className="Response">Result: {response.data.averageResult.overall}</div>}
+        {response && <div className="Response">Results: {response}</div>}
       </div>
     </div>
   );
