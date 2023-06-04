@@ -1,7 +1,8 @@
 import lighthouse from "lighthouse";
 import chromeLauncher from "chrome-launcher";
 import desktopConfig from "../config/desktop-config.js";
-import sendSSE from "../utils/sendSSE.js";
+import sendEventMessage from "../utils/sendEventMessage.js";
+import { Request, Response } from 'express';
 
 async function launchChrome() {
   return await chromeLauncher.launch({
@@ -29,7 +30,7 @@ function prepareOptions(chromePort, desktop) {
 }
 
 function calculateTimeElapsed(startTime) {
-  const totalTime = new Date() - startTime;
+  const totalTime = new Date().getTime() - startTime;
   const diffMins = Math.floor(totalTime / 60000);
   const diffSecs = Math.floor((totalTime % 60000) / 1000);
   return `${diffMins}m${diffSecs}`;
@@ -79,9 +80,9 @@ function calculateMedian(resultsArray) {
   };
 }
 
-let testParams = {};
+let testParams: {url?: string, runs?: number, desktop?: boolean} = {};
 
-export default async function runTestController(req, res) {
+export default async function runTestController(req: Request, res: Response) {
   // loading the parameters for the test
   if (req.method === "POST") {
     testParams = req.body;
@@ -96,19 +97,19 @@ export default async function runTestController(req, res) {
       res.setHeader("Content-Type", "text/event-stream");
       res.setHeader("Access-Control-Allow-Origin", "*");
 
-      sendSSE(res, "update", "Tests started");
+      sendEventMessage(res, "update", "Tests started");
 
-      const startTime = new Date();
+      const startTime = new Date().getTime();
       const options = prepareOptions(chrome.port, desktop);
       const resultsArray = [];
 
       for (let i = 0; i < runs; i++) {
-        sendSSE(res, "update", `Running test ${i + 1}`);
+        sendEventMessage(res, "update", `Running test ${i + 1}`);
         const runResult = await runLighthouse(url, options);
         resultsArray.push(runResult.lhr);
       }
 
-      sendSSE(res, "update", `Tests finished, calculating results`);
+      sendEventMessage(res, "update", `Tests finished, calculating results`);
 
       const timeElapsed = calculateTimeElapsed(startTime);
       const averageResult = calculateAverage(resultsArray, runs);
@@ -116,12 +117,12 @@ export default async function runTestController(req, res) {
 
       const results = { timeElapsed, averageResult, medianResult };
 
-      sendSSE(res, "results", JSON.stringify(results));
+      sendEventMessage(res, "results", JSON.stringify(results));
     } catch (error) {
-      sendSSE(res, "message", `Error: ${error}`);
+      sendEventMessage(res, "message", `Error: ${error}`);
     } finally {
       await closeChrome(chrome);
-      sendSSE(res, "message", "Closing event stream");
+      sendEventMessage(res, "message", "Closing event stream");
       res.end();
     }
   }

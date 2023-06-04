@@ -22,14 +22,14 @@
       "extends": ["airbnb", "plugin:react/recommended"]
     },
     {
-      "files": ["server/**/*.js"],
+      "files": ["server/**/*.ts"],
       "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"
       },
       "env": {
         "node": true,
-        "es6": true
+        "es2022": true
       },
       "extends": ["eslint:recommended"]
     }
