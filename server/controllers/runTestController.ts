@@ -1,8 +1,9 @@
-import lighthouse from "lighthouse";
+import lighthouse, { Flags } from "lighthouse";
 import chromeLauncher from "chrome-launcher";
 import desktopConfig from "../config/desktop-config.js";
 import sendEventMessage from "../utils/sendEventMessage.js";
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
+import { TestParamsReqBody } from "../types/common";
 
 async function launchChrome() {
   return await chromeLauncher.launch({
@@ -10,18 +11,18 @@ async function launchChrome() {
   });
 }
 
-function closeChrome(chrome) {
+function closeChrome(chrome: chromeLauncher.LaunchedChrome) {
   return chrome.kill();
 }
 
-async function runLighthouse(url, options) {
+async function runLighthouse(url: string, options: Flags) {
   return await lighthouse(url, options);
 }
 
-function prepareOptions(chromePort, desktop) {
+function prepareOptions(chromePort: number, desktop: boolean) {
   return {
-    logLevel: "silent",
-    output: "html",
+    logLevel: "silent" as const,
+    output: "html" as const,
     onlyCategories: ["performance"],
     port: chromePort,
     // blockedUrlPatterns: ["assets.adobedtm.com/launch*"],
@@ -29,14 +30,14 @@ function prepareOptions(chromePort, desktop) {
   };
 }
 
-function calculateTimeElapsed(startTime) {
+function calculateTimeElapsed(startTime: number) {
   const totalTime = new Date().getTime() - startTime;
   const diffMins = Math.floor(totalTime / 60000);
   const diffSecs = Math.floor((totalTime % 60000) / 1000);
   return `${diffMins}m${diffSecs}`;
 }
 
-function calculateAverage(resultsArray, runs) {
+function calculateAverage(resultsArray: { categories: any; audits: any }[], runs: number) {
   const totalScores = {
     overall: 0,
     FCP: 0,
@@ -66,8 +67,13 @@ function calculateAverage(resultsArray, runs) {
   };
 }
 
-function calculateMedian(resultsArray) {
-  resultsArray.sort((a, b) => a.categories.performance.score - b.categories.performance.score);
+function calculateMedian(resultsArray: any[]) {
+  resultsArray.sort(
+    (
+      a: { categories: { performance: { score: number } } },
+      b: { categories: { performance: { score: number } } }
+    ) => a.categories.performance.score - b.categories.performance.score
+  );
   const mNum = Math.floor(resultsArray.length / 2);
 
   return {
@@ -80,7 +86,7 @@ function calculateMedian(resultsArray) {
   };
 }
 
-let testParams: {url?: string, runs?: number, desktop?: boolean} = {};
+let testParams = <TestParamsReqBody>{};
 
 export default async function runTestController(req: Request, res: Response) {
   // loading the parameters for the test
@@ -90,6 +96,12 @@ export default async function runTestController(req: Request, res: Response) {
 
   // running the test with the loaded parameters
   if (req.method === "GET") {
+
+    // return if endpoint hasn't been substantiated yet
+    if (Object.keys(testParams).length === 0) {
+      res.status(404).json({ message: "Test not found" });
+    }
+
     const { url, runs, desktop } = testParams;
     const chrome = await launchChrome();
 
@@ -106,7 +118,7 @@ export default async function runTestController(req: Request, res: Response) {
       for (let i = 0; i < runs; i++) {
         sendEventMessage(res, "update", `Running test ${i + 1}`);
         const runResult = await runLighthouse(url, options);
-        resultsArray.push(runResult.lhr);
+        if (runResult) resultsArray.push(runResult.lhr);
       }
 
       sendEventMessage(res, "update", `Tests finished, calculating results`);
