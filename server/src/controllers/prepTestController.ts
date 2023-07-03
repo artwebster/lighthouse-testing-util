@@ -15,3 +15,8 @@ export default async function prepTestController(req: Request<{}, {}, TestParams
     res.status(500).json({ status: 500, message: error.message });
   }
 }
+
+export function testFunction(num1: number, num2: number) {
+  const sum = num1 + num2;
+  return sum;
+}
