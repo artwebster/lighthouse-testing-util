@@ -127,7 +127,7 @@ export default async function runTestController(req: Request, res: Response) {
       const averageResult = calculateAverage(resultsArray, runs);
       const medianResult = calculateMedian(resultsArray);
 
-      const results = { timeElapsed, averageResult, medianResult };
+      const results = { timeElapsed, averageResult, medianResult, runs };
 
       sendEventMessage(res, "results", JSON.stringify(results));
     } catch (error) {

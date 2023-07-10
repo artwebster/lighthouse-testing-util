@@ -1,0 +1,27 @@
+@import './styles/colors.scss';
+
+#root {
+  max-width: 635px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.app__section--wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 15px 7px;
+}
+
+.separator--short {display: none}
+
+@media (max-width: 425px) {
+  .separator--long {display: none}
+  .separator--short {display: block}
+}
