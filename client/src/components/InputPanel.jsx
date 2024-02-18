@@ -18,8 +18,14 @@ function InputPanel({ handleFormSubmit, submitDisabled }) {
     }, 0);
   }
 
+  function handleKeyDown(ev) {
+    if (ev.key === "Enter") {
+      handleFormSubmit(ev);
+    }
+  }
+
   return (
-    <form className="cmp-input-panel">
+    <form className="cmp-input-panel" onKeyDown={handleKeyDown}>
       <div className="intro-section__wrapper">
         <p>
           Welcome to the Lighthouse Batch Runner! Please fill out the fields below and click

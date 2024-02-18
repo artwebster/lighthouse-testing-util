@@ -109,19 +109,20 @@ export default async function runTestController(req: Request, res: Response) {
       res.setHeader("Content-Type", "text/event-stream");
       res.setHeader("Access-Control-Allow-Origin", "*");
 
-      sendEventMessage(res, "update", "Tests started");
+      sendEventMessage({ res, event: "update", data: "Tests started" });
 
       const startTime = new Date().getTime();
       const options = prepareOptions(chrome.port, desktop);
       const resultsArray = [];
 
       for (let i = 0; i < runs; i++) {
-        sendEventMessage(res, "update", `Running test ${i + 1}`);
+        sendEventMessage({ res, event: "update", data: `Running test ${i + 1}` });
+        sendEventMessage({ res, event: "status", data: { current: i + 1, total: runs } });
         const runResult = await runLighthouse(url, options);
         if (runResult) resultsArray.push(runResult.lhr);
       }
 
-      sendEventMessage(res, "update", `Tests finished, calculating results`);
+      sendEventMessage({res, event: "update", data: "Tests finished, calculating results"});
 
       const timeElapsed = calculateTimeElapsed(startTime);
       const averageResult = calculateAverage(resultsArray, runs);
@@ -129,12 +130,12 @@ export default async function runTestController(req: Request, res: Response) {
 
       const results = { timeElapsed, averageResult, medianResult, runs };
 
-      sendEventMessage(res, "results", JSON.stringify(results));
+      sendEventMessage({ res, event: "results", data: results });
     } catch (error) {
-      sendEventMessage(res, "message", `Error: ${error}`);
+      sendEventMessage({ res, event: "message", data: `Error: ${error}` });
     } finally {
       await closeChrome(chrome);
-      sendEventMessage(res, "message", "Closing event stream");
+      sendEventMessage({ res, event: "message", data: "Closing event stream" });
       res.end();
     }
   }

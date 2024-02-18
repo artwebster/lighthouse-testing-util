@@ -3,11 +3,13 @@ import axios from "axios";
 import "./App.scss";
 import ResultsPanel from "./components/ResultsPanel";
 import InputPanel from "./components/InputPanel";
+import ProgressBar from "./components/ProgressBar";
 
 function App() {
   const [response, setResponse] = useState(null);
   const [resultsData, setResultsData] = useState();
   const [submitDisabled, setSubmitDisabled] = useState(false);
+  const [status, setStatus] = useState();
 
   // open a connection to the server to receive updates
   function subscribeToEvent(source) {
@@ -25,6 +27,10 @@ function App() {
 
     eventSource.addEventListener("message", (ev) => {
       console.log(ev.data);
+    });
+
+    eventSource.addEventListener("status", (ev) => {
+      setStatus(JSON.parse(ev.data))
     });
 
     eventSource.onerror = (err) => {
@@ -54,6 +60,7 @@ function App() {
   function handleFormSubmit(ev) {
     setResponse(null);
     setResultsData(null);
+    setStatus(null);
 
     const userInput = {
       url: ev.target.form[0].value,
@@ -85,7 +92,10 @@ function App() {
             <ResultsPanel resultsData={resultsData} />
           </>
         ) : (
-          response && <div className="Response">Results: {response}</div>
+          <>
+            {response && <div className="Response">Results: {response}</div>}
+            {status && <ProgressBar status={status} />}
+          </>
         )}
       </div>
     </div>

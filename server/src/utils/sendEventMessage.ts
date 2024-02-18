@@ -1,13 +1,26 @@
 import { Response } from "express";
 
-// function to send messages to the frontend
-// must be called within an SSE stream
+interface EventMessageParams {
+	res: Response;
+	event: "message" | "update" | "results" | "status";
+	data: string | Object;
+}
 
-export default function sendEventMessage(
-  res: Response,
-  event: "message" | "update" | "results",
-  data: string
-) {
-  res.write(`event: ${event}\n`);
-  res.write(`data: ${data}\n\n`);
+/**
+ * Sends an event message to the response stream.
+ *
+ * @param {EventMessageParams} params - The parameters for the function.
+ * @param {Response} params.res - The Express response object.
+ * @param {"message" | "update" | "results" | "status"} params.event - The type of event.
+ * @param {string | Object} params.data - The data to be sent with the event.
+ */
+export default function sendEventMessage(params: EventMessageParams) {
+	let { res, event, data } = params;
+
+	if (typeof data === "object") {
+		data = JSON.stringify(data);
+	}
+
+	res.write(`event: ${event}\n`);
+	res.write(`data: ${data}\n\n`);
 }
