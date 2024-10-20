@@ -1,5 +1,118 @@
+@import "../styles/variables.scss";
+
 .cmp-results-panel {
-  ul {
-    list-style: none;
-  }
+	width: 100%;
+	margin-top: 14px;
+
+	ul {
+		list-style: none;
+	}
+
+	.cmp-results-panel__wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 30px;
+
+		@media (min-width: $breakpoint-tablet--small) {
+			flex-direction: row;
+			gap: 0;
+		}
+
+		.lh-score--good {
+			color: $color-green;
+			fill: $color-green;
+			stroke: $color-green;
+		}
+
+		.lh-score--average {
+			color: $color-yellow;
+			fill: $color-yellow;
+			stroke: $color-yellow;
+		}
+
+		.lh-score--poor {
+			color: $color-red;
+			fill: $color-red;
+			stroke: $color-red;
+		}
+
+		.cmp-results-panel__overall {
+			@media (min-width: $breakpoint-tablet--small) {
+				margin-inline: 75px;
+			}
+
+			.lh-gauge__wrapper {
+				position: relative;
+				display: flex;
+				align-items: center;
+				flex-direction: column;
+				text-decoration: none;
+				padding: 8px;
+				--transition-length: 1s;
+				contain: content;
+				will-change: opacity;
+			}
+
+			.lh-gauge {
+				stroke-linecap: round;
+				width: 96px;
+				height: 96px;
+			}
+
+			.lh-gauge__svg-wrapper {
+				position: relative;
+				height: 96px;
+			}
+
+			.lh-gauge-base {
+				opacity: 0.1;
+			}
+
+			.lh-gauge-arc {
+				fill: none;
+				transform-origin: 50% 50%;
+				animation: load-gauge 1s ease both;
+				animation-delay: 250ms;
+			}
+
+			.lh-gauge__percentage {
+				font-size: 2rem;
+				font-weight: 500;
+				position: absolute;
+				top: 33px;
+                color: $color-dark-grey;
+			}
+
+			.lh-gauge__label {
+				margin-top: 14px;
+                color: $color-dark-grey;
+			}
+		}
+
+		.cmp-results-panel__metrics {
+			display: grid;
+			grid-template-columns: 1fr;
+			row-gap: 1rem;
+			width: 100%;
+
+			@media (min-width: $breakpoint-mobile) {
+				grid-template-columns: 1fr 1fr;
+			}
+
+			.cmp-results-panel__metric {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				@media (min-width: $breakpoint-mobile) {
+					display: block;
+				}
+
+				.cmp-results-panel__metric-score {
+					font-size: 1.5em;
+					font-weight: 500;
+				}
+			}
+		}
+	}
 }

@@ -1,0 +1,36 @@
+.cmp-runconfigbox {
+    width: 100%;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        > * {
+            width: 100%;
+        }
+    }
+
+	.button-section__wrapper {
+		margin-top: 10px;
+	}
+
+	.button-submit {
+		border: none;
+		font-size: 20px;
+		padding: 0;
+	}
+
+	.section__wrapper {
+		display: flex;
+		align-items: center;
+		height: 40px;
+
+		> span {
+			min-width: 112px;
+		}
+	}
+
+	.device-section__radio-button {
+		margin: 0 12px;
+	}
+}

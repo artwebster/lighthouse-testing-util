@@ -77,7 +77,7 @@ function calculateMedian(resultsArray: any[]) {
   const mNum = Math.floor(resultsArray.length / 2);
 
   return {
-    overall: resultsArray[mNum].categories.performance.score * 100,
+    overall: Math.round(resultsArray[mNum].categories.performance.score * 100),
     FCP: (resultsArray[mNum].audits["first-contentful-paint"].numericValue / 1000).toFixed(2),
     SI: (resultsArray[mNum].audits["speed-index"].numericValue / 1000).toFixed(2),
     LCP: (resultsArray[mNum].audits["largest-contentful-paint"].numericValue / 1000).toFixed(2),

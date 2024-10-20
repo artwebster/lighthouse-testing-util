@@ -1,27 +1,22 @@
-@import './styles/colors.scss';
-
-#root {
-  max-width: 635px;
-  margin: 0 auto;
-  padding: 2rem;
-}
+@import "./styles/variables.scss";
 
 .app {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+
+    @media (min-width: $breakpoint-mobile) {
+       padding: 2rem; 
+    }
 }
 
 .app__section--wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin: 15px 7px;
-}
-
-.separator--short {display: none}
-
-@media (max-width: 425px) {
-  .separator--long {display: none}
-  .separator--short {display: block}
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+    gap: 1rem;
+	margin: 15px 7px;
 }
