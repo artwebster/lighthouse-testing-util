@@ -1,14 +1,18 @@
 import { Divider } from "@mui/material";
 
-import "./Header.scss"
+import "./Header.scss";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
-function Header() {
+function Header({ isAuthenticated, user }) {
 	return (
 		<>
 			<header>
-				<h1>Lighthouse Runner</h1>
+				<Link to="/">
+					<h1>Lighthouse Runner</h1>
+				</Link>
 				<div className="header__signin">
-					<p>Sign In</p>
+					{isAuthenticated ? <p>Welcome, {user}</p> : <Link to="/signin">Sign In</Link>}
 				</div>
 			</header>
 			<Divider flexItem />
@@ -17,3 +21,8 @@ function Header() {
 }
 
 export default Header;
+
+Header.propTypes = {
+	isAuthenticated: PropTypes.bool,
+    user: PropTypes.string
+};

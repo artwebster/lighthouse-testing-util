@@ -8,6 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/lighthouse': 'http://localhost:5000/',
+      '/auth': 'http://localhost:5000/',
     },
   },
 });
