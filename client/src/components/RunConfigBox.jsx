@@ -1,15 +1,15 @@
-import { useRef } from "react";
-import PropTypes from "prop-types";
-import { Box, TextField, Slider, Button } from "@mui/material";
+import { useRef } from 'react';
+import PropTypes from 'prop-types';
+import { Box, TextField, Slider, Button } from '@mui/material';
 
-import "./RunConfigBox.scss";
+import './RunConfigBox.scss';
 
 function RunConfigBox({ handleFormSubmit, submitDisabled }) {
 	const refURL = useRef(null);
 	const refNumRuns = useRef(null);
 
 	function handleKeyDown(ev) {
-		if (ev.key === "Enter") {
+		if (ev.key === 'Enter') {
 			handleFormSubmit(ev);
 		}
 	}

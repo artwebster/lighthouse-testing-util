@@ -1,6 +1,6 @@
-import PropTypes from "prop-types";
-import "./InputPanel.scss";
-import RunConfigBox from "./RunConfigBox";
+import PropTypes from 'prop-types';
+import './InputPanel.scss';
+import RunConfigBox from './RunConfigBox';
 
 function InputPanel({ handleFormSubmit, submitDisabled }) {
 	return (
@@ -20,5 +20,5 @@ export default InputPanel;
 
 InputPanel.propTypes = {
 	handleFormSubmit: PropTypes.func,
-	submitDisabled: PropTypes.bool,
+	submitDisabled: PropTypes.bool
 };

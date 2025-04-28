@@ -1,9 +1,9 @@
-import { SignInPage } from "@toolpad/core/SignInPage";
+import { SignInPage } from '@toolpad/core/SignInPage';
 
 function SignIn() {
 	const providers = [
-		{ id: "github", name: "GitHub" },
-		{ id: "google", name: "Google" },
+		{ id: 'github', name: 'GitHub' },
+		{ id: 'google', name: 'Google' }
 	];
 
 	const signUserIn = async (provider) => {

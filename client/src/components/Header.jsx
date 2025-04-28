@@ -1,8 +1,8 @@
-import { Divider } from "@mui/material";
+import { Divider } from '@mui/material';
 
-import "./Header.scss";
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
+import './Header.scss';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 function Header({ isAuthenticated, user }) {
 	return (

@@ -1,9 +1,9 @@
-import { Response } from "express";
+import { Response } from 'express';
 
 interface EventMessageParams {
 	res: Response;
-	event: "message" | "update" | "results" | "status";
-	data: string | Object;
+	event: 'message' | 'update' | 'results' | 'status';
+	data: string | object;
 }
 
 /**
@@ -17,7 +17,7 @@ interface EventMessageParams {
 export default function sendEventMessage(params: EventMessageParams) {
 	let { res, event, data } = params;
 
-	if (typeof data === "object") {
+	if (typeof data === 'object') {
 		data = JSON.stringify(data);
 	}
 

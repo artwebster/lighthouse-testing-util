@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import apiClient from "../utils/apiClient";
+import { useEffect, useState } from 'react';
+import apiClient from '../utils/apiClient';
 
 export default function useAuth() {
 	const [authState, setAuthState] = useState({
 		isAuthenticated: false,
 		user: null,
 		isLoading: true,
-		error: null,
+		error: null
 	});
 
 	useEffect(() => {
@@ -14,11 +14,11 @@ export default function useAuth() {
 			try {
 				// checking if there's a token in the URL
 				const urlParams = new URLSearchParams(window.location.search);
-				const tokenFromUrl = urlParams.get("token");
+				const tokenFromUrl = urlParams.get('token');
 
 				if (tokenFromUrl) {
 					// if token present, save it to localStorage
-					localStorage.setItem("authToken", tokenFromUrl);
+					localStorage.setItem('authToken', tokenFromUrl);
 
 					// clean URL by removing the token parameter
 					const cleanUrl = window.location.pathname;
@@ -26,38 +26,40 @@ export default function useAuth() {
 				}
 
 				// check for token in localStorage
-				const token = localStorage.getItem("authToken");
+				const token = localStorage.getItem('authToken');
 
 				if (!token) {
 					setAuthState({
 						isAuthenticated: false,
 						user: null,
 						isLoading: false,
-						error: null,
+						error: null
 					});
 					return;
 				}
 
 				// verify token with backend
-				const response = await apiClient.get("/auth/verify-token");
+				const response = await apiClient.get('/auth/verify-token');
 
 				if (response.data.success) {
 					setAuthState({
 						isAuthenticated: true,
 						user: response.data.user,
 						isLoading: false,
-						error: null,
+						error: null
 					});
 				}
 			} catch (error) {
 				// token invalid or expired
-				localStorage.removeItem("authToken");
+				localStorage.removeItem('authToken');
 				setAuthState({
 					isAuthenticated: false,
 					user: null,
 					isLoading: false,
-					error: "Authentication failed",
+					error: 'Authentication failed'
 				});
+
+				console.error(error);
 			}
 		};
 
@@ -65,12 +67,12 @@ export default function useAuth() {
 	}, []);
 
 	const logout = () => {
-		localStorage.removeItem("authToken");
+		localStorage.removeItem('authToken');
 		setAuthState({
 			isAuthenticated: false,
 			user: null,
 			isLoading: false,
-			error: null,
+			error: null
 		});
 	};
 

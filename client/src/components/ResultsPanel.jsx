@@ -1,32 +1,32 @@
-import PropTypes from "prop-types";
-import "./ResultsPanel.scss";
+import PropTypes from 'prop-types';
+import './ResultsPanel.scss';
 
 function ResultsPanel({ resultsData }) {
 	const { overall, FCP, LCP, TBT, CLS, SI } = resultsData.medianResult;
 
-	let outcomeOverall = "poor";
-	if (overall > 50) outcomeOverall = "average";
-	if (overall > 89) outcomeOverall = "good";
+	let outcomeOverall = 'poor';
+	if (overall > 50) { outcomeOverall = 'average'; }
+	if (overall > 89) { outcomeOverall = 'good'; }
 
-	let outcomeFCP = "poor";
-	if (FCP < 3) outcomeFCP = "average";
-	if (FCP < 1.8) outcomeFCP = "good";
+	let outcomeFCP = 'poor';
+	if (FCP < 3) { outcomeFCP = 'average'; }
+	if (FCP < 1.8) { outcomeFCP = 'good'; }
 
-	let outcomeLCP = "poor";
-	if (LCP < 4) outcomeLCP = "average";
-	if (LCP < 2.5) outcomeLCP = "good";
+	let outcomeLCP = 'poor';
+	if (LCP < 4) { outcomeLCP = 'average'; }
+	if (LCP < 2.5) { outcomeLCP = 'good'; }
 
-	let outcomeTBT = "poor";
-	if (TBT < 600) outcomeTBT = "average";
-	if (TBT < 200) outcomeTBT = "good";
+	let outcomeTBT = 'poor';
+	if (TBT < 600) { outcomeTBT = 'average'; }
+	if (TBT < 200) { outcomeTBT = 'good'; }
 
-	let outcomeCLS = "poor";
-	if (CLS < 0.25) outcomeCLS = "average";
-	if (CLS < 0.1) outcomeCLS = "good";
+	let outcomeCLS = 'poor';
+	if (CLS < 0.25) { outcomeCLS = 'average'; }
+	if (CLS < 0.1) { outcomeCLS = 'good'; }
 
-	let outcomeSI = "poor";
-	if (SI < 5.8) outcomeSI = "average";
-	if (SI < 3.4) outcomeSI = "good";
+	let outcomeSI = 'poor';
+	if (SI < 5.8) { outcomeSI = 'average'; }
+	if (SI < 3.4) { outcomeSI = 'good'; }
 
 	return (
 		<div className="cmp-results-panel">
@@ -51,8 +51,8 @@ function ResultsPanel({ resultsData }) {
 											cy="60"
 											strokeWidth="8"
 											style={{
-												transform: "rotate(-87.9537deg)",
-												strokeDasharray: `${(overall * 348) / 100}`,
+												transform: 'rotate(-87.9537deg)',
+												strokeDasharray: `${(overall * 348) / 100}`
 											}}
 										></circle>
 									</svg>
@@ -103,5 +103,5 @@ function ResultsPanel({ resultsData }) {
 export default ResultsPanel;
 
 ResultsPanel.propTypes = {
-	resultsData: PropTypes.object,
+	resultsData: PropTypes.object
 };

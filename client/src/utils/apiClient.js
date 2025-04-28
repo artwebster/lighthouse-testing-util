@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 const apiClient = axios.create();
 
@@ -6,7 +6,7 @@ const apiClient = axios.create();
 apiClient.interceptors.request.use(
 	(config) => {
 		// get the latest token on each request
-		const token = localStorage.getItem("authToken");
+		const token = localStorage.getItem('authToken');
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}

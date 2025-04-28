@@ -1,11 +1,11 @@
-import express from "express";
-import session from "express-session";
-import passport from "passport";
+import express from 'express';
+import session from 'express-session';
+import passport from 'passport';
 
-import { PORT, SESSION_SECRET } from "./config/env.js";
-import "./config/passport.js";
+import { PORT, SESSION_SECRET } from './config/env.js';
+import './config/passport.js';
 
-import router from "./routes/index.js";
+import router from './routes/index.js';
 
 const app = express();
 
@@ -13,7 +13,7 @@ app.use(
 	session({
 		secret: SESSION_SECRET,
 		resave: false,
-		saveUninitialized: false,
+		saveUninitialized: false
 	})
 );
 

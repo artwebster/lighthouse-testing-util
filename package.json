@@ -8,7 +8,8 @@
     "start": "concurrently \"cd ./server && npm run server\" \"cd ./client && npm run dev\"",
     "prepare": "husky install",
     "pretest": "lint-staged",
-    "lint": "eslint client server"
+    "lint": "eslint client server",
+    "lintfix": "eslint client server --fix"
   },
   "keywords": [],
   "author": "",

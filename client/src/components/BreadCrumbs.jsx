@@ -1,4 +1,3 @@
-import { Breadcrumbs } from "@mui/material";
+import { Breadcrumbs } from '@mui/material';
 
-function BreadCrumbs() {
-}
+function BreadCrumbs() {}

@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { LinearProgress } from "@mui/material";
-import "./ProgressBar.scss";
-import PropTypes from "prop-types";
+import { useEffect, useState } from 'react';
+import { LinearProgress } from '@mui/material';
+import './ProgressBar.scss';
+import PropTypes from 'prop-types';
 
 function ProgressBar({ status }) {
 	const { current, total } = status;
@@ -19,7 +19,7 @@ function ProgressBar({ status }) {
 
         return () => {
             clearInterval(timer);
-        }
+        };
 	}, [current]);
 
 	return (
@@ -32,5 +32,5 @@ function ProgressBar({ status }) {
 export default ProgressBar;
 
 ProgressBar.propTypes = {
-	status: PropTypes.object,
+	status: PropTypes.object
 };
