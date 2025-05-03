@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import useAuth from './hooks/useAuth';
-import axios from 'axios';
 import './App.scss';
 import ResultsPanel from './components/ResultsPanel';
 import InputPanel from './components/InputPanel';
 import ProgressBar from './components/ProgressBar';
-import { Breadcrumbs, Divider } from '@mui/material';
+import { Divider } from '@mui/material';
 import Header from './components/Header';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import SignIn from './components/SignIn';
+import apiClient from './utils/apiClient';
+import Pages from './components/history/Pages';
+import Tests from './components/history/Tests';
+import BreadCrumbsSection from './components/BreadCrumbs';
+import Test from './components/history/Test';
 
 function App() {
 	const [response, setResponse] = useState(null);
@@ -16,7 +20,7 @@ function App() {
 	const [submitDisabled, setSubmitDisabled] = useState(false);
 	const [status, setStatus] = useState();
 
-	const { isAuthenticated, user } = useAuth();
+	const { isAuthenticated, user, logout } = useAuth();
 
 	// open a connection to the server to receive updates
 	function subscribeToEvent(source) {
@@ -50,7 +54,7 @@ function App() {
 	}
 
 	function launchTest(userInput) {
-		axios
+		apiClient
 			.post('/lighthouse/prepTest', userInput)
 			.then((res) => {
 				subscribeToEvent(res.data.data);
@@ -60,7 +64,9 @@ function App() {
 
 	function validateRuns(runsInput) {
 		let numRuns = Number(runsInput);
-		if (!numRuns) { return null; }
+		if (!numRuns) {
+			return null;
+		}
 		numRuns =
 			numRuns > 10 ? 10
 			: numRuns < 1 ? 1
@@ -89,21 +95,17 @@ function App() {
 
 	return (
 		<BrowserRouter>
-			<Header isAuthenticated={isAuthenticated} user={user?.name} />
+			<Header isAuthenticated={isAuthenticated} user={user?.name} logout={logout} />
 			<div className="app">
+				{isAuthenticated && (
+                    <BreadCrumbsSection />
+				)}
 				<Routes>
 					<Route path="/signin" element={<SignIn />}></Route>
 					<Route
 						path="/"
 						element={
 							<>
-								{isAuthenticated && (
-									<Breadcrumbs>
-										<Link to="/pages">Pages</Link>
-										<Link to="/tests">Tests</Link>
-										<Link to="/testid">Test ID</Link>
-									</Breadcrumbs>
-								)}
 								<div className="app__section--wrapper">
 									<InputPanel handleFormSubmit={handleFormSubmit} submitDisabled={submitDisabled} />
 								</div>
@@ -120,6 +122,33 @@ function App() {
 									}
 								</div>
 							</>
+						}
+					></Route>
+
+					<Route
+						path="/pages"
+						element={
+							<div className="app__section--wrapper">
+								<Pages userId={user?.id} />
+							</div>
+						}
+					></Route>
+
+					<Route
+						path="/tests"
+						element={
+							<div className="app__section--wrapper">
+								<Tests />
+							</div>
+						}
+					></Route>
+
+					<Route
+						path="/test/:testId"
+						element={
+							<div className="app__section--wrapper">
+								<Test />
+							</div>
 						}
 					></Route>
 				</Routes>

@@ -1,13 +1,14 @@
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
-
 import { PORT, SESSION_SECRET } from './config/env.js';
+import { initializeDatabase } from './config/database.js';
+import router from './routes/index.js';
 import './config/passport.js';
 
-import router from './routes/index.js';
-
 const app = express();
+
+await initializeDatabase();
 
 app.use(
 	session({

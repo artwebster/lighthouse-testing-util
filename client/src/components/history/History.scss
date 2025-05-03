@@ -1,0 +1,10 @@
+@import "../../styles/variables.scss";
+
+.history__page-row {
+    cursor: pointer;
+    
+    &:hover,
+    &:focus {
+        background-color: $color-light-grey;
+    }
+}

@@ -3,7 +3,8 @@ import chromeLauncher from 'chrome-launcher';
 import desktopConfig from '../config/desktop-config.js';
 import sendEventMessage from '../utils/sendEventMessage.js';
 import { Request, Response } from 'express';
-import { TestParamsReqBody } from '../types/common';
+import { GoogleUser, TestParamsReqBody } from '../types/common';
+import { saveTestResult } from '../repositories/testResultRepository.js';
 
 async function launchChrome() {
 	return await chromeLauncher.launch({
@@ -87,11 +88,18 @@ function calculateMedian(resultsArray: any[]) {
 }
 
 let testParams = <TestParamsReqBody>{};
+let userId: string | null = null; 
 
 export default async function runTestController(req: Request, res: Response) {
 	// loading the parameters for the test
 	if (req.method === 'POST') {
 		testParams = req.body;
+
+        // if user is authenticated, saving their id
+	    const user = req.user as GoogleUser;
+        if (req.isAuthenticated() && user) {
+            userId = user.id;
+        }
 	}
 
 	// running the test with the loaded parameters
@@ -130,6 +138,16 @@ export default async function runTestController(req: Request, res: Response) {
 			const medianResult = calculateMedian(resultsArray);
 
 			const results = { timeElapsed, averageResult, medianResult, runs };
+
+            // saving the test results to the database if user is authenticated
+            if (userId) {
+                await saveTestResult(
+                    userId,
+                    url,
+                    results,
+                    new Date()
+                );
+            }
 
 			sendEventMessage({ res, event: 'results', data: results });
 		} catch (error) {

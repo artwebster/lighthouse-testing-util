@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
-import { CLIENT_URL } from '../config/env.js';
-
-import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../config/env.js';
+import { CLIENT_URL, JWT_SECRET } from '../config/env.js';
 import { GoogleUser } from '../types/common.js';
+import jwt from 'jsonwebtoken';
 
 export const handleGoogleCallback = (req: Request, res: Response) => {
 	if (!req.user) {
