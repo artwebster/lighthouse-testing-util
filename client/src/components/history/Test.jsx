@@ -37,10 +37,7 @@ function Test() {
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								<TableRow
-									sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-									className="history__page-row"
-								>
+								<TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 									<TableCell component="th" scope="row">
 										{testResult.url}
 									</TableCell>

@@ -1,10 +1,19 @@
-@import "../../styles/variables.scss";
+@import '../../styles/variables.scss';
 
 .history__page-row {
-    cursor: pointer;
-    
-    &:hover,
-    &:focus {
-        background-color: $color-light-grey;
-    }
+	cursor: pointer;
+
+	&:hover,
+	&:focus {
+		background-color: $color-light-grey;
+	}
+}
+
+.history__results-graph--wrapper {
+	width: 100%;
+	margin: 15px 7px;
+}
+
+.history__results-graph--graph {
+	width: 100%;
 }
